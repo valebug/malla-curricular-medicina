@@ -64,7 +64,22 @@ const malla = [
 ];
 
 // Estado de ramos aprobados
-const estado = {};
+const ESTADO_STORAGE_KEY = "mallaEstadoRamos";
+
+function cargarEstado() {
+  try {
+    const guardado = localStorage.getItem(ESTADO_STORAGE_KEY);
+    return guardado ? JSON.parse(guardado) : {};
+  } catch {
+    return {};
+  }
+}
+
+function guardarEstado() {
+  localStorage.setItem(ESTADO_STORAGE_KEY, JSON.stringify(estado));
+}
+
+const estado = cargarEstado();
 
 function renderMalla() {
   for (let i = 1; i <= 7; i++) {
@@ -86,6 +101,7 @@ function renderMalla() {
     div.onclick = () => {
       if (!requisitosCumplidos(ramo)) return;
       estado[ramo.nombre] = !estado[ramo.nombre];
+      guardarEstado();
       renderMalla();
     };
 
